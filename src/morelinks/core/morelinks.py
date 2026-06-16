@@ -166,7 +166,7 @@ class MoreLinks:
             CREATE TABLE IF NOT EXISTS license (
                 id INTEGER PRIMARY KEY,
                 license_key TEXT,
-                edition TEXT,
+                edition TEXT DEFAULT 'demo',
                 activated_at TEXT,
                 expires_at TEXT,
                 user_email TEXT
@@ -264,6 +264,7 @@ class MoreLinks:
         return UserInDB(
             id=UUID(user_id),
             email=user_data.email,
+            password_hash=password_hash,
             api_key=api_key,
             plan=user_data.plan,
             created_at=datetime.fromisoformat(created_at)
