@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6C63FF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>MoreLinks</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; color: white; }
+        .app { max-width: 480px; margin: 0 auto; padding: 20px; padding-bottom: 100px; }
+        .header { text-align: center; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+        .header h1 { font-size: 28px; background: linear-gradient(90deg, #6C63FF, #00d9ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .tabs { display: flex; gap: 5px; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 15px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 12px; text-align: center; border-radius: 12px; cursor: pointer; font-size: 14px; }
+        .tab.active { background: #6C63FF; }
+        .section { display: none; }
+        .section.active { display: block; }
+        .form-group { margin-bottom: 15px; }
+        .form-group input { width: 100%; padding: 15px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; background: rgba(255,255,255,0.05); color: white; font-size: 16px; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .btn-primary { background: linear-gradient(90deg, #6C63FF, #00d9ff); color: white; }
+        .link-card { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; margin-bottom: 10px; }
+        .link-card .title { font-weight: bold; margin-bottom: 5px; }
+        .link-card .url { font-size: 12px; color: rgba(255,255,255,0.6); word-break: break-all; }
+        .link-card .stats { display: flex; justify-content: space-between; margin-top: 10px; font-size: 12px; color: #00d9ff; }
+        .chat-container { height: 50vh; overflow-y: auto; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 12px; margin-bottom: 15px; }
+        .message { padding: 10px 15px; border-radius: 15px; margin-bottom: 10px; max-width: 85%; }
+        .message.user { background: #6C63FF; margin-left: auto; border-bottom-right-radius: 5px; }
+        .message.ai { background: rgba(255,255,255,0.1); border-bottom-left-radius: 5px; }
+        .chat-input { display: flex; gap: 10px; }
+        .chat-input input { flex: 1; }
+        .chat-input button { padding: 15px 25px; background: #6C63FF; border: none; border-radius: 12px; color: white; font-size: 20px; cursor: pointer; }
+        .norm-card { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #6C63FF; }
+        .norm-card h3 { font-size: 14px; margin-bottom: 5px; }
+        .norm-card p { font-size: 12px; color: rgba(255,255,255,0.7); }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a2e; border-top: 1px solid rgba(255,255,255,0.1); padding: 15px; }
+        .status { text-align: center; padding: 20px; color: rgba(255,255,255,0.5); }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="header"><h1>MoreLinks</h1><p style="color: rgba(255,255,255,0.6)">Piattaforma Completa di Gestione</p></div>
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('links')">Link</div>
+            <div class="tab" onclick="showTab('chat')">Chat</div>
+            <div class="tab" onclick="showTab('norms')">Norme</div>
+        </div>
+        <div id="links" class="section active">
+            <div class="form-group"><input type="url" id="linkUrl" placeholder="https://..."></div>
+            <div class="form-group"><input type="text" id="linkTitle" placeholder="Titolo"></div>
+            <button class="btn btn-primary" onclick="createLink()">Crea Link</button>
+            <div id="linksList" style="margin-top: 20px;"></div>
+        </div>
+        <div id="chat" class="section">
+            <div class="chat-container" id="chatContainer"><div class="message ai">Ciao! Sono il tuo assistente MoreLinks.</div></div>
+            <div class="chat-input"><input type="text" id="chatInput" placeholder="Scrivi..." onkeypress="if(event.key==='Enter')sendMessage()"><button onclick="sendMessage()">></button></div>
+        </div>
+        <div id="norms" class="section">
+            <div class="form-group"><input type="text" id="normSearch" placeholder="Cerca normativa..."></div>
+            <button class="btn btn-primary" onclick="searchNorms()">Cerca</button>
+            <div id="normsList" style="margin-top: 20px;"><div class="norm-card"><h3>GDPR</h3><p>Regolamento UE 2016/679</p></div></div>
+        </div>
+    </div>
+    <div class="bottom-nav"><button class="btn btn-primary" onclick="alert('MoreLinks v1.0')">Info</button></div>
+    <script>
+        let links = JSON.parse(localStorage.getItem('ml_links') || '[]');
+        function showTab(id) { document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); event.target.classList.add('active'); }
+        function createLink() { var url = document.getElementById('linkUrl').value, title = document.getElementById('linkTitle').value || 'Untitled'; if(!url) return; links.push({id: Date.now(), code: Math.random().toString(36).substr(2,6), url: url, title: title, clicks: 0}); localStorage.setItem('ml_links', JSON.stringify(links)); document.getElementById('linkUrl').value=''; document.getElementById('linkTitle').value=''; render(); alert('Link creato!'); }
+        function render() { var c = document.getElementById('linksList'); c.innerHTML = links.length ? links.map(function(l){return '<div class="link-card"><div class="title">'+l.title+'</div><div class="url">'+l.url.substr(0,40)+'...</div><div class="stats"><span>'+l.code+'</span><span>'+l.clicks+' click</span></div></div>';}).join('') : '<div class="status">Nessun link</div>'; }
+        function sendMessage() { var inp = document.getElementById('chatInput'), m = inp.value.trim(); if(!m) return; document.getElementById('chatContainer').innerHTML += '<div class="message user">'+m+'</div>'; inp.value=''; setTimeout(function(){ var r = m.toLowerCase().indexOf('aiuto') >= 0 ? 'Comandi: link, norme, stats' : 'Ho capito!'; document.getElementById('chatContainer').innerHTML += '<div class="message ai">'+r+'</div>'; }, 500); }
+        function searchNorms() { document.getElementById('normsList').innerHTML = '<div class="norm-card"><h3>GDPR</h3><p>Regolamento UE 2016/679</p></div><div class="norm-card"><h3>Privacy</h3><p>D.Lgs. 196/2003</p></div>'; }
+        render();
+    </script>
+</body>
+</html>
