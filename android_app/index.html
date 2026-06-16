@@ -5,75 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#6C63FF">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>MoreLinks</title>
+    <title>MoreLinks - Gestionale</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; color: white; }
         .app { max-width: 100%; margin: 0 auto; height: 100vh; display: flex; flex-direction: column; }
-        .header { display: flex; align-items: center; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); gap: 15px; }
-        .menu-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 5px; }
-        .header h1 { font-size: 20px; background: linear-gradient(90deg, #6C63FF, #00d9ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; flex: 1; }
+        .header { display: flex; align-items: center; padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); gap: 10px; background: #0d0d1a; }
+        .header h1 { font-size: 16px; background: linear-gradient(90deg, #6C63FF, #00d9ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; flex: 1; }
+        .icon-btn { background: rgba(255,255,255,0.1); border: none; color: white; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; }
         .main-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
-        .tabs { display: flex; gap: 5px; background: rgba(255,255,255,0.05); padding: 5px; margin: 15px; border-radius: 15px; }
-        .tab { flex: 1; padding: 10px; text-align: center; border-radius: 12px; cursor: pointer; font-size: 13px; }
-        .tab.active { background: #6C63FF; }
+        
+        /* Nav tabs */
+        .nav-tabs { display: flex; gap: 3px; background: rgba(255,255,255,0.05); padding: 4px; margin: 10px; border-radius: 12px; overflow-x: auto; }
+        .nav-tab { padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 11px; white-space: nowrap; display: flex; align-items: center; gap: 4px; }
+        .nav-tab.active { background: #6C63FF; }
+        .nav-tab .badge { background: #ff4444; font-size: 9px; padding: 1px 5px; border-radius: 10px; }
+        
         .section { display: none; height: 100%; }
         .section.active { display: flex; flex-direction: column; }
-        .form-group { margin: 0 15px 15px 15px; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; background: rgba(255,255,255,0.05); color: white; font-size: 14px; }
-        .btn { padding: 12px 20px; border: none; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; }
-        .btn-primary { background: linear-gradient(90deg, #6C63FF, #00d9ff); color: white; }
-        .btn-small { padding: 8px 15px; font-size: 12px; }
-        .link-card { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; margin: 0 15px 10px 15px; }
-        .link-card .title { font-weight: bold; margin-bottom: 5px; font-size: 14px; }
-        .link-card .url { font-size: 11px; color: rgba(255,255,255,0.6); word-break: break-all; }
-        .link-card .stats { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: #00d9ff; }
-        .scroll-area { flex: 1; overflow-y: auto; padding-bottom: 20px; }
+        .scroll-area { flex: 1; overflow-y: auto; padding: 10px; }
         
-        /* Chat */
-        .chat-container { flex: 1; overflow-y: auto; padding: 15px; background: rgba(255,255,255,0.02); margin: 0 15px; border-radius: 15px; }
-        .message { padding: 10px 15px; border-radius: 15px; margin-bottom: 10px; max-width: 85%; font-size: 14px; }
-        .message.user { background: #6C63FF; margin-left: auto; border-bottom-right-radius: 5px; }
-        .message.ai { background: rgba(255,255,255,0.1); border-bottom-left-radius: 5px; }
-        .message.file { background: rgba(0,217,255,0.2); border: 1px solid #00d9ff; }
-        .file-preview { display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-top: 5px; }
-        .file-preview .icon { font-size: 24px; }
-        .file-preview .info { flex: 1; }
-        .file-preview .name { font-size: 12px; font-weight: bold; }
-        .file-preview .size { font-size: 10px; color: rgba(255,255,255,0.6); }
-        .chat-input-area { display: flex; gap: 10px; padding: 15px; align-items: center; }
-        .chat-input { flex: 1; padding: 12px 15px; border: 1px solid rgba(255,255,255,0.1); border-radius: 25px; background: rgba(255,255,255,0.05); color: white; font-size: 14px; }
-        .attach-btn, .send-btn { width: 45px; height: 45px; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; }
-        .attach-btn { background: rgba(255,255,255,0.1); color: white; }
-        .send-btn { background: #6C63FF; color: white; }
+        /* Cards */
+        .card { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .card-title { font-size: 14px; font-weight: bold; }
+        .card-amount { font-size: 18px; font-weight: bold; }
+        .card-amount.positive { color: #4ade80; }
+        .card-amount.negative { color: #f87171; }
+        .card-subtitle { font-size: 11px; color: rgba(255,255,255,0.6); }
+        
+        /* List items */
+        .list-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 8px; cursor: pointer; }
+        .list-item:hover { background: rgba(255,255,255,0.08); }
+        .list-item .icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .list-item .info { flex: 1; }
+        .list-item .title { font-size: 13px; font-weight: 500; }
+        .list-item .subtitle { font-size: 11px; color: rgba(255,255,255,0.5); }
+        .list-item .amount { font-size: 13px; font-weight: bold; text-align: right; }
+        .list-item .date { font-size: 10px; color: rgba(255,255,255,0.4); text-align: right; }
+        
+        /* Buttons */
+        .btn { padding: 10px 15px; border: none; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer; }
+        .btn-primary { background: linear-gradient(90deg, #6C63FF, #00d9ff); color: white; }
+        .btn-success { background: #4ade80; color: #000; }
+        .btn-danger { background: #f87171; color: #000; }
+        .btn-block { width: 100%; }
+        .btn-sm { padding: 6px 12px; font-size: 11px; }
+        
+        /* Form */
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 11px; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; background: rgba(255,255,255,0.05); color: white; font-size: 13px; }
         
         /* Sidebar */
-        .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background: #1a1a2e; border-right: 1px solid rgba(255,255,255,0.1); z-index: 1000; transition: left 0.3s; }
+        .sidebar { position: fixed; top: 0; left: -300px; width: 300px; height: 100vh; background: #1a1a2e; border-right: 1px solid rgba(255,255,255,0.1); z-index: 1000; transition: left 0.3s; overflow-y: auto; }
         .sidebar.open { left: 0; }
-        .sidebar-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
-        .sidebar-header h2 { font-size: 16px; color: #00d9ff; }
-        .close-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
-        .sidebar-content { padding: 15px; height: calc(100vh - 70px); overflow-y: auto; }
-        .sidebar-section { margin-bottom: 20px; }
-        .sidebar-section h3 { font-size: 12px; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-bottom: 10px; }
-        .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: background 0.2s; }
-        .sidebar-item:hover { background: rgba(255,255,255,0.1); }
-        .sidebar-item .icon { font-size: 20px; }
+        .sidebar-header { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .sidebar-header h2 { font-size: 14px; color: #00d9ff; }
+        .sidebar-section { padding: 10px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-section h3 { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 8px; }
+        .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 6px; cursor: pointer; }
+        .sidebar-item:hover { background: rgba(255,255,255,0.08); }
+        .sidebar-item .icon { font-size: 16px; }
         .sidebar-item .info { flex: 1; }
-        .sidebar-item .name { font-size: 13px; }
-        .sidebar-item .status { font-size: 10px; color: #00d9ff; }
-        .sidebar-item .progress { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 5px; overflow: hidden; }
-        .sidebar-item .progress-bar { height: 100%; background: linear-gradient(90deg, #6C63FF, #00d9ff); width: 0%; transition: width 0.3s; }
+        .sidebar-item .name { font-size: 12px; }
+        .sidebar-item .status { font-size: 9px; color: #00d9ff; }
+        .sidebar-item .progress { height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+        .sidebar-item .progress-bar { height: 100%; background: linear-gradient(90deg, #6C63FF, #00d9ff); width: 0%; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: none; }
         .overlay.show { display: block; }
         
-        /* Norms */
-        .norm-card { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; margin: 0 15px 10px 15px; border-left: 4px solid #6C63FF; }
-        .norm-card h3 { font-size: 13px; margin-bottom: 5px; }
-        .norm-card p { font-size: 11px; color: rgba(255,255,255,0.7); }
+        /* Chat */
+        .chat-container { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 10px 14px; border-radius: 15px; max-width: 85%; font-size: 13px; line-height: 1.4; }
+        .message.user { background: #6C63FF; margin-left: auto; border-bottom-right-radius: 5px; }
+        .message.ai { background: rgba(255,255,255,0.1); border-bottom-left-radius: 5px; }
+        .message.time { font-size: 10px; color: rgba(255,255,255,0.4); text-align: center; margin: 5px 0; }
+        .message.file-msg { background: rgba(0,217,255,0.15); border: 1px solid rgba(0,217,255,0.3); }
+        .chat-date { font-size: 10px; color: rgba(255,255,255,0.4); text-align: center; margin: 10px 0; }
+        .chat-input-area { display: flex; gap: 8px; padding: 10px; background: rgba(0,0,0,0.2); }
+        .chat-input { flex: 1; padding: 10px 14px; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; background: rgba(255,255,255,0.05); color: white; font-size: 13px; }
+        .chat-btn { width: 40px; height: 40px; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; }
+        .chat-btn.send { background: #6C63FF; color: white; }
+        .chat-btn.attach { background: rgba(255,255,255,0.1); color: white; }
         
-        .status-text { text-align: center; padding: 20px; color: rgba(255,255,255,0.5); font-size: 13px; }
-        .badge { background: #ff4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 5px; }
+        /* Stats grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
+        .stat-card { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 12px; text-align: center; }
+        .stat-card .value { font-size: 20px; font-weight: bold; }
+        .stat-card .label { font-size: 10px; color: rgba(255,255,255,0.5); }
+        .stat-card.positive .value { color: #4ade80; }
+        .stat-card.negative .value { color: #f87171; }
+        
+        /* Modal */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal.show { display: flex; }
+        .modal-content { background: #1a1a2e; border-radius: 15px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { font-size: 14px; }
+        .modal-body { padding: 15px; }
+        .modal-footer { padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; }
+        .modal-footer .btn { flex: 1; }
+        
+        /* Status indicators */
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+        .status-dot.green { background: #4ade80; }
+        .status-dot.yellow { background: #fbbf24; }
+        .status-dot.red { background: #f87171; }
+        
+        .status-text { text-align: center; padding: 30px; color: rgba(255,255,255,0.5); font-size: 12px; }
+        
+        /* Quick actions */
+        .quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
+        .quick-action { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 12px 8px; text-align: center; cursor: pointer; }
+        .quick-action:hover { background: rgba(255,255,255,0.1); }
+        .quick-action .icon { font-size: 20px; margin-bottom: 4px; }
+        .quick-action .label { font-size: 9px; color: rgba(255,255,255,0.6); }
+        
+        /* Table */
+        .table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .table th { text-align: left; padding: 8px; color: rgba(255,255,255,0.5); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .table td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .table tr:hover { background: rgba(255,255,255,0.03); }
     </style>
 </head>
 <body>
@@ -82,182 +135,798 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h2>📁 File in Lavorazione</h2>
-            <button class="close-btn" onclick="toggleSidebar()">&times;</button>
+            <h2>📁 Menu</h2>
+            <button class="icon-btn" onclick="toggleSidebar()">&times;</button>
         </div>
-        <div class="sidebar-content">
-            <div class="sidebar-section">
-                <h3>In Elaborazione</h3>
-                <div id="processingFiles"></div>
-            </div>
-            <div class="sidebar-section">
-                <h3>Completati</h3>
-                <div id="completedFiles"></div>
-            </div>
-            <div class="sidebar-section">
-                <h3>Condivisi</h3>
-                <div id="sharedFiles"></div>
+        
+        <div class="sidebar-section">
+            <h3>📂 File</h3>
+            <div id="processingFiles"></div>
+            <div id="completedFiles"></div>
+            <div id="sharedFiles"></div>
+        </div>
+        
+        <div class="sidebar-section">
+            <h3>💬 Chat Recenti</h3>
+            <div id="chatHistoryList"></div>
+        </div>
+        
+        <div class="sidebar-section">
+            <h3>⚙️ Impostazioni</h3>
+            <div class="sidebar-item" onclick="showSection('settings')">
+                <span class="icon">⚙️</span>
+                <div class="info"><div class="name">Impostazioni</div></div>
             </div>
         </div>
     </div>
     
     <div class="app">
         <div class="header">
-            <button class="menu-btn" onclick="toggleSidebar()">&#9776;</button>
-            <h1>MoreLinks</h1>
-            <button class="menu-btn" onclick="showTab('chat')">💬</button>
+            <button class="icon-btn" onclick="toggleSidebar()">☰</button>
+            <h1>MoreLinks Gestionale</h1>
+            <button class="icon-btn" onclick="showSection('chat')">💬</button>
+            <button class="icon-btn" onclick="showModal('settingsModal')">⚙️</button>
         </div>
         
         <div class="main-content">
-            <div class="tabs">
-                <div class="tab active" onclick="showTab('links')">🔗 Link</div>
-                <div class="tab" onclick="showTab('chat')">💬 Chat</div>
-                <div class="tab" onclick="showTab('norms')">📜 Norme</div>
-            </div>
-            
-            <!-- Links Tab -->
-            <div id="links" class="section active">
-                <div class="form-group"><input type="url" id="linkUrl" placeholder="https://..."></div>
-                <div class="form-group" style="display:flex;gap:10px;">
-                    <input type="text" id="linkTitle" placeholder="Titolo" style="flex:1;">
-                    <button class="btn btn-primary btn-small" onclick="createLink()">Crea</button>
+            <!-- Dashboard -->
+            <div id="dashboard" class="section active">
+                <div class="scroll-area">
+                    <div class="stats-grid">
+                        <div class="stat-card positive">
+                            <div class="value" id="totalIn">€0</div>
+                            <div class="label">Fatture Attive</div>
+                        </div>
+                        <div class="stat-card negative">
+                            <div class="value" id="totalOut">€0</div>
+                            <div class="label">Fatture Passive</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="value" id="totalCorr">€0</div>
+                            <div class="label">Corrispettivi</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="value" id="totalF24">€0</div>
+                            <div class="label">F24 da Pagare</div>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="showModal('fatturaInModal')">
+                            <div class="icon">📥</div>
+                            <div class="label">Fattura In</div>
+                        </div>
+                        <div class="quick-action" onclick="showModal('fatturaOutModal')">
+                            <div class="icon">📤</div>
+                            <div class="label">Fattura Out</div>
+                        </div>
+                        <div class="quick-action" onclick="showModal('corrispettivoModal')">
+                            <div class="icon">💰</div>
+                            <div class="label">Corrispettivo</div>
+                        </div>
+                        <div class="quick-action" onclick="showModal('f24Modal')">
+                            <div class="icon">📋</div>
+                            <div class="label">F24</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">📊 Riepilogo</span>
+                        </div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                            <div>
+                                <div class="card-subtitle">Debiti</div>
+                                <div class="card-amount negative" id="totalDebts">€0</div>
+                            </div>
+                            <div>
+                                <div class="card-subtitle">Crediti</div>
+                                <div class="card-amount positive" id="totalCredits">€0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="font-size:11px;color:rgba(255,255,255,0.4);text-align:center;padding:10px;">
+                        Ultimo aggiornamento: <span id="lastUpdate"></span>
+                    </div>
                 </div>
-                <div class="scroll-area" id="linksList"></div>
             </div>
             
-            <!-- Chat Tab -->
+            <!-- Fatture -->
+            <div id="fatture" class="section">
+                <div style="padding:10px;display:flex;gap:8px;">
+                    <button class="btn btn-sm btn-primary" onclick="filterFatture('all')">Tutte</button>
+                    <button class="btn btn-sm" style="background:rgba(255,255,255,0.1)" onclick="filterFatture('in')">Ingresso</button>
+                    <button class="btn btn-sm" style="background:rgba(255,255,255,0.1)" onclick="filterFatture('out')">Uscita</button>
+                </div>
+                <div class="scroll-area" id="fattureList"></div>
+            </div>
+            
+            <!-- F24 -->
+            <div id="f24" class="section">
+                <div style="padding:10px;">
+                    <button class="btn btn-primary btn-block" onclick="showModal('f24Modal')">+ Nuovo F24</button>
+                </div>
+                <div class="scroll-area" id="f24List"></div>
+            </div>
+            
+            <!-- Mastrini -->
+            <div id="mastrini" class="section">
+                <div class="scroll-area">
+                    <div id="mastrinoContent"></div>
+                </div>
+            </div>
+            
+            <!-- Cespiti -->
+            <div id="cespiti" class="section">
+                <div style="padding:10px;">
+                    <button class="btn btn-primary btn-block" onclick="showModal('cespiteModal')">+ Nuovo Cespite</button>
+                </div>
+                <div class="scroll-area" id="cespitiList"></div>
+            </div>
+            
+            <!-- Corrispettivi -->
+            <div id="corrispettivi" class="section">
+                <div style="padding:10px;display:flex;gap:8px;">
+                    <button class="btn btn-primary btn-sm" onclick="showModal('corrispettivoModal')">+ Nuovo</button>
+                    <select class="form-group" style="flex:1" onchange="filterCorrispettivi(this.value)">
+                        <option value="today">Oggi</option>
+                        <option value="week">Questa Settimana</option>
+                        <option value="month">Questo Mese</option>
+                        <option value="all">Tutti</option>
+                    </select>
+                </div>
+                <div class="scroll-area" id="corrispettiviList"></div>
+            </div>
+            
+            <!-- Chat -->
             <div id="chat" class="section">
-                <div class="chat-container" id="chatContainer">
-                    <div class="message ai">👋 Ciao! Sono il tuo assistente MoreLinks con supporto file. Puoi inviarmi immagini, documenti PDF, audio e altro. Usa la 📎 per allegare file!</div>
-                </div>
+                <div class="chat-container" id="chatContainer"></div>
                 <div class="chat-input-area">
-                    <input type="file" id="fileInput" style="display:none;" onchange="handleFile(this.files[0])" accept="*/*">
-                    <button class="attach-btn" onclick="document.getElementById('fileInput').click()">📎</button>
-                    <input type="text" class="chat-input" id="chatInput" placeholder="Scrivi un messaggio..." onkeypress="if(event.key==='Enter')sendMessage()">
-                    <button class="send-btn" onclick="sendMessage()">➤</button>
+                    <input type="file" id="fileInput" style="display:none;" onchange="handleFile(this.files[0])">
+                    <button class="chat-btn attach" onclick="document.getElementById('fileInput').click()">📎</button>
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Scrivi..." onkeypress="if(event.key==='Enter')sendMessage()">
+                    <button class="chat-btn send" onclick="sendMessage()">➤</button>
                 </div>
             </div>
             
-            <!-- Norms Tab -->
-            <div id="norms" class="section">
-                <div class="form-group">
-                    <input type="text" id="normSearch" placeholder="Cerca normativa..." onkeypress="if(event.key==='Enter')searchNorms()">
+            <!-- Impostazioni -->
+            <div id="settings" class="section">
+                <div class="scroll-area">
+                    <div class="card">
+                        <h3 style="font-size:14px;margin-bottom:15px;">🏢 Dati Azienda</h3>
+                        <div class="form-group">
+                            <label>Ragione Sociale</label>
+                            <input type="text" id="companyName" placeholder="Nome Azienda">
+                        </div>
+                        <div class="form-group">
+                            <label>P.IVA / Codice Fiscale</label>
+                            <input type="text" id="companyPiva" placeholder="12345678901">
+                        </div>
+                        <div class="form-group">
+                            <label>Indirizzo</label>
+                            <input type="text" id="companyAddress" placeholder="Via Roma 1">
+                        </div>
+                        <button class="btn btn-primary btn-block" onclick="saveCompanyData()">Salva</button>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="font-size:14px;margin-bottom:15px;">💾 Esporta Dati</h3>
+                        <button class="btn btn-block" style="background:rgba(255,255,255,0.1);margin-bottom:10px;" onclick="exportData('json')">📥 Esporta JSON</button>
+                        <button class="btn btn-block" style="background:rgba(255,255,255,0.1)" onclick="exportData('csv')">📊 Esporta CSV</button>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="font-size:14px;margin-bottom:15px;">🔄 Importa Dati</h3>
+                        <input type="file" id="importFile" style="display:none;" accept=".json,.csv" onchange="importData(this.files[0])">
+                        <button class="btn btn-block" style="background:rgba(255,255,255,0.1)" onclick="document.getElementById('importFile').click()">📤 Importa File</button>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="font-size:14px;margin-bottom:15px;">⚠️ Zona Pericolosa</h3>
+                        <button class="btn btn-danger btn-block" onclick="if(confirm('Eliminare tutti i dati?')) clearAllData()">🗑️ Elimina Tutti i Dati</button>
+                    </div>
                 </div>
-                <button class="btn btn-primary" style="margin:0 15px 15px 15px;" onclick="searchNorms()">🔍 Cerca</button>
-                <div class="scroll-area" id="normsList">
-                    <div class="norm-card"><h3>📋 GDPR</h3><p>Regolamento UE 2016/679 sulla protezione dei dati personali.</p></div>
-                    <div class="norm-card"><h3>📋 Codice Privacy</h3><p>D.Lgs. 196/2003 sulla protezione dei dati personali in Italia.</p></div>
-                    <div class="norm-card"><h3>📋 Cookie Law</h3><p>Provvedimento Garante Privacy sui cookie.</p></div>
-                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Nav -->
+        <div style="display:flex;background:#0d0d1a;border-top:1px solid rgba(255,255,255,0.1);padding:5px;">
+            <div class="nav-tab active" onclick="showSection('dashboard')" style="flex:1;justify-content:center;">📊<span class="hide-text">Dash</span></div>
+            <div class="nav-tab" onclick="showSection('fatture')" style="flex:1;justify-content:center;">📄<span class="hide-text">Fatt</span></div>
+            <div class="nav-tab" onclick="showSection('f24')" style="flex:1;justify-content:center;">📋<span class="hide-text">F24</span></div>
+            <div class="nav-tab" onclick="showSection('chat')" style="flex:1;justify-content:center;">💬<span class="hide-text">Chat</span></div>
+            <div class="nav-tab" onclick="showSection('mastrini')" style="flex:1;justify-content:center;">📒<span class="hide-text">Mast</span></div>
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    <div class="modal" id="fatturaInModal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>📥 Nuova Fattura in Ingresso</h3><button class="icon-btn" onclick="closeModal('fatturaInModal')">&times;</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Numero Fattura</label><input type="text" id="fi_numero" placeholder="FT-001"></div>
+                <div class="form-group"><label>Data</label><input type="date" id="fi_data"></div>
+                <div class="form-group"><label>Fornitore</label><input type="text" id="fi_fornitore" placeholder="Nome fornitore"></div>
+                <div class="form-group"><label>Importo (€)</label><input type="number" id="fi_importo" placeholder="0.00" step="0.01"></div>
+                <div class="form-group"><label>Descrizione</label><textarea id="fi_descrizione" rows="2" placeholder="Descrizione..."></textarea></div>
+                <div class="form-group"><label>Scadenza</label><input type="date" id="fi_scadenza"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background:rgba(255,255,255,0.1)" onclick="closeModal('fatturaInModal')">Annulla</button>
+                <button class="btn btn-primary" onclick="saveFatturaIn()">Salva</button>
             </div>
         </div>
     </div>
     
+    <div class="modal" id="fatturaOutModal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>📤 Nuova Fattura in Uscita</h3><button class="icon-btn" onclick="closeModal('fatturaOutModal')">&times;</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Numero Fattura</label><input type="text" id="fo_numero" placeholder="FT-001"></div>
+                <div class="form-group"><label>Data</label><input type="date" id="fo_data"></div>
+                <div class="form-group"><label>Cliente</label><input type="text" id="fo_cliente" placeholder="Nome cliente"></div>
+                <div class="form-group"><label>Importo (€)</label><input type="number" id="fo_importo" placeholder="0.00" step="0.01"></div>
+                <div class="form-group"><label>Descrizione</label><textarea id="fo_descrizione" rows="2" placeholder="Descrizione..."></textarea></div>
+                <div class="form-group"><label>Scadenza</label><input type="date" id="fo_scadenza"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background:rgba(255,255,255,0.1)" onclick="closeModal('fatturaOutModal')">Annulla</button>
+                <button class="btn btn-success" onclick="saveFatturaOut()">Salva</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="corrispettivoModal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>💰 Nuovo Corrispettivo</h3><button class="icon-btn" onclick="closeModal('corrispettivoModal')">&times;</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Data</label><input type="date" id="corr_data"></div>
+                <div class="form-group"><label>Importo (€)</label><input type="number" id="corr_importo" placeholder="0.00" step="0.01"></div>
+                <div class="form-group"><label>Metodo pagamento</label>
+                    <select id="corr_pagamento">
+                        <option value="contanti">Contanti</option>
+                        <option value="bancomat">Bancomat</option>
+                        <option value="carta">Carta di credito</option>
+                        <option value="bonifico">Bonifico</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Descrizione</label><textarea id="corr_descrizione" rows="2" placeholder="Descrizione..."></textarea></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background:rgba(255,255,255,0.1)" onclick="closeModal('corrispettivoModal')">Annulla</button>
+                <button class="btn btn-success" onclick="saveCorrispettivo()">Salva</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="f24Modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>📋 Nuovo F24</h3><button class="icon-btn" onclick="closeModal('f24Modal')">&times;</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Data Scadenza</label><input type="date" id="f24_scadenza"></div>
+                <div class="form-group"><label>Codice Tributo</label>
+                    <select id="f24_tributo">
+                        <option value="1001">1001 - IRPEF dipendenti</option>
+                        <option value="1002">1002 - IRPEF autonomi</option>
+                        <option value="3900">3900 - INPS</option>
+                        <option value="3500">3500 - INAIL</option>
+                        <option value="6001">6001 - IVA</option>
+                        <option value="9701">9701 - INPS Gestione Separata</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Importo (€)</label><input type="number" id="f24_importo" placeholder="0.00" step="0.01"></div>
+                <div class="form-group"><label>Note</label><textarea id="f24_note" rows="2" placeholder="Note..."></textarea></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background:rgba(255,255,255,0.1)" onclick="closeModal('f24Modal')">Annulla</button>
+                <button class="btn btn-primary" onclick="saveF24()">Salva</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="cespiteModal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>🏢 Nuovo Cespite</h3><button class="icon-btn" onclick="closeModal('cespiteModal')">&times;</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Descrizione</label><input type="text" id="ces_descrizione" placeholder="Nome cespite"></div>
+                <div class="form-group"><label>Categoria</label>
+                    <select id="ces_categoria">
+                        <option value="immobili">Immobili</option>
+                        <option value="autoveicoli">Autoveicoli</option>
+                        <option value="macchinari">Macchinari</option>
+                        <option value="mobili">Mobili e Arredi</option>
+                        <option value="informatica">Hardware/Software</option>
+                        <option value="altro">Altro</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Data Acquisto</label><input type="date" id="ces_data"></div>
+                <div class="form-group"><label>Valore d'Acquisto (€)</label><input type="number" id="ces_valore" placeholder="0.00" step="0.01"></div>
+                <div class="form-group"><label>Vita Utile (anni)</label><input type="number" id="ces_vita" value="5"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background:rgba(255,255,255,0.1)" onclick="closeModal('cespiteModal')">Annulla</button>
+                <button class="btn btn-primary" onclick="saveCespite()">Salva</button>
+            </div>
+        </div>
+    </div>
+    
+    <input type="file" id="fileInput" style="display:none;" onchange="handleFile(this.files[0])">
+
     <script>
-        // State
-        let links = JSON.parse(localStorage.getItem('ml_links') || '[]');
-        let processingFiles = [];
-        let completedFiles = [];
+        // ============ STATE ============
+        var state = {
+            fattureIn: [],
+            fattureOut: [],
+            corrispettivi: [],
+            f24s: [],
+            cespiti: [],
+            mastrini: [],
+            chatHistory: [],
+            currentChatId: null,
+            processingFiles: [],
+            completedFiles: [],
+            companyData: {}
+        };
         
-        // Sidebar
+        // ============ INIT ============
+        function init() {
+            loadState();
+            if(state.chatHistory.length === 0) {
+                createNewChat();
+            } else {
+                loadChat(state.chatHistory[0].id);
+            }
+            renderAll();
+            updateStats();
+            updateLastUpdate();
+            loadCompanyData();
+        }
+        
+        function loadState() {
+            var saved = localStorage.getItem('ml_state');
+            if(saved) {
+                state = JSON.parse(saved);
+            }
+        }
+        
+        function saveState() {
+            localStorage.setItem('ml_state', JSON.stringify(state));
+            updateLastUpdate();
+        }
+        
+        function updateLastUpdate() {
+            var now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleString('it-IT');
+        }
+        
+        // ============ NAVIGATION ============
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+            document.querySelectorAll('.nav-tab').forEach(function(t){ t.classList.remove('active'); });
+            document.getElementById(id).classList.add('active');
+            event.target.closest('.nav-tab') && event.target.closest('.nav-tab').classList.add('active');
+            if(!event.target.closest('.nav-tab')) {
+                event.target.classList.add('active');
+            }
+        }
+        
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('show');
+            renderChatHistory();
         }
         
-        // Tabs
-        function showTab(id) {
-            document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
-            document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
-            document.getElementById(id).classList.add('active');
-            event.target.classList.add('active');
+        function showModal(id) {
+            document.getElementById(id).classList.add('show');
         }
         
-        // Links
-        function createLink() {
-            var url = document.getElementById('linkUrl').value;
-            var title = document.getElementById('linkTitle').value || 'Untitled';
-            if(!url) { alert('Inserisci un URL'); return; }
-            links.push({id: Date.now(), code: Math.random().toString(36).substr(2,6), url: url, title: title, clicks: 0});
-            localStorage.setItem('ml_links', JSON.stringify(links));
-            document.getElementById('linkUrl').value = '';
-            document.getElementById('linkTitle').value = '';
-            renderLinks();
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
         }
         
-        function renderLinks() {
-            var c = document.getElementById('linksList');
-            if(links.length === 0) {
-                c.innerHTML = '<div class="status-text">Nessun link creato</div>';
+        // ============ FATTURE ============
+        function saveFatturaIn() {
+            var fattura = {
+                id: Date.now(),
+                numero: document.getElementById('fi_numero').value,
+                data: document.getElementById('fi_data').value,
+                fornitore: document.getElementById('fi_fornitore').value,
+                importo: parseFloat(document.getElementById('fi_importo').value) || 0,
+                descrizione: document.getElementById('fi_descrizione').value,
+                scadenza: document.getElementById('fi_scadenza').value,
+                pagato: false,
+                type: 'in'
+            };
+            state.fattureIn.push(fattura);
+            addToMastrino('Debiti vs Fornitori', fattura.importo, 'Fattura ' + fattura.numero);
+            saveState();
+            renderFatture();
+            updateStats();
+            closeModal('fatturaInModal');
+            alert('Fattura salvata!');
+        }
+        
+        function saveFatturaOut() {
+            var fattura = {
+                id: Date.now(),
+                numero: document.getElementById('fo_numero').value,
+                data: document.getElementById('fo_data').value,
+                cliente: document.getElementById('fo_cliente').value,
+                importo: parseFloat(document.getElementById('fo_importo').value) || 0,
+                descrizione: document.getElementById('fo_descrizione').value,
+                scadenza: document.getElementById('fo_scadenza').value,
+                pagato: false,
+                type: 'out'
+            };
+            state.fattureOut.push(fattura);
+            addToMastrino('Crediti vs Clienti', fattura.importo, 'Fattura ' + fattura.numero);
+            saveState();
+            renderFatture();
+            updateStats();
+            closeModal('fatturaOutModal');
+            alert('Fattura salvata!');
+        }
+        
+        function filterFatture(filter) {
+            renderFatture(filter);
+        }
+        
+        function renderFatture(filter) {
+            var container = document.getElementById('fattureList');
+            var all = [];
+            
+            if(!filter || filter === 'all' || filter === 'in') {
+                all = all.concat(state.fattureIn.map(function(f) {
+                    return {type: 'in', data: f, icon: '📥', label: f.fornitore};
+                }));
+            }
+            if(!filter || filter === 'all' || filter === 'out') {
+                all = all.concat(state.fattureOut.map(function(f) {
+                    return {type: 'out', data: f, icon: '📤', label: f.cliente};
+                }));
+            }
+            
+            if(all.length === 0) {
+                container.innerHTML = '<div class="status-text">Nessuna fattura</div>';
                 return;
             }
-            c.innerHTML = links.map(function(l) {
-                return '<div class="link-card"><div class="title">'+l.title+'</div><div class="url">'+l.url.substr(0,40)+'...</div><div class="stats"><span>📎 '+l.code+'</span><span>👆 '+l.clicks+' click</span></div></div>';
+            
+            container.innerHTML = all.sort(function(a,b){ return new Date(b.data.data) - new Date(a.data.data); }).map(function(item) {
+                var f = item.data;
+                return '<div class="list-item" onclick="toggleFattura(\''+item.type+'\','+f.id+')"><div class="icon" style="background:'+(item.type==='in'?'rgba(74,222,128,0.2)':'rgba(248,113,113,0.2)')+'">'+item.icon+'</div><div class="info"><div class="title">'+item.label+'</div><div class="subtitle">'+f.numero+' - '+f.data+'</div></div><div><div class="amount '+(item.type==='in'?'positive':'negative')+'">€'+f.importo.toFixed(2)+'</div><div class="date">'+(f.pagato?'✅ Pagato':'⏳ '+f.scadenza)+'</div></div></div>';
             }).join('');
         }
         
-        // File handling
-        function handleFile(file) {
-            if(!file) return;
-            
-            // Add to processing
-            var fileObj = {
+        function toggleFattura(type, id) {
+            var list = type === 'in' ? state.fattureIn : state.fattureOut;
+            var item = list.find(function(f){ return f.id === id; });
+            if(item) {
+                item.pagato = !item.pagato;
+                saveState();
+                renderFatture();
+                updateStats();
+            }
+        }
+        
+        // ============ F24 ============
+        function saveF24() {
+            var f24 = {
                 id: Date.now(),
-                name: file.name,
-                size: formatSize(file.size),
-                type: getFileIcon(file.type),
-                progress: 0,
-                status: 'Elaborazione...'
+                scadenza: document.getElementById('f24_scadenza').value,
+                tributo: document.getElementById('f24_tributo').value,
+                importo: parseFloat(document.getElementById('f24_importo').value) || 0,
+                note: document.getElementById('f24_note').value,
+                pagato: false
+            };
+            state.f24s.push(f24);
+            saveState();
+            renderF24();
+            updateStats();
+            closeModal('f24Modal');
+            alert('F24 salvato!');
+        }
+        
+        function renderF24() {
+            var container = document.getElementById('f24List');
+            var tributi = {'1001':'IRPEF Dip','1002':'IRPEF Aut','3900':'INPS','3500':'INAIL','6001':'IVA','9701':'INPS GS'};
+            
+            if(state.f24s.length === 0) {
+                container.innerHTML = '<div class="status-text">Nessun F24 registrato</div>';
+                return;
+            }
+            
+            container.innerHTML = state.f24s.sort(function(a,b){ return new Date(a.scadenza) - new Date(b.scadenza); }).map(function(f) {
+                var isOverdue = !f.pagato && new Date(f.scadenza) < new Date();
+                return '<div class="list-item" onclick="toggleF24('+f.id+')"><div class="icon" style="background:'+(f.pagato?'rgba(74,222,128,0.2)':isOverdue?'rgba(248,113,113,0.2)':'rgba(251,191,36,0.2)')+'">📋</div><div class="info"><div class="title">'+tributi[f.tributo]+'</div><div class="subtitle">Scadenza: '+f.scadenza+'</div></div><div><div class="amount">€'+f.importo.toFixed(2)+'</div><div class="date">'+(f.pagato?'✅ Pagato':isOverdue?'⚠️ Scaduto':'⏳ Da pagare')+'</div></div></div>';
+            }).join('');
+        }
+        
+        function toggleF24(id) {
+            var item = state.f24s.find(function(f){ return f.id === id; });
+            if(item) {
+                item.pagato = !item.pagato;
+                saveState();
+                renderF24();
+                updateStats();
+            }
+        }
+        
+        // ============ CORRISPETTIVI ============
+        function saveCorrispettivo() {
+            var corr = {
+                id: Date.now(),
+                data: document.getElementById('corr_data').value,
+                importo: parseFloat(document.getElementById('corr_importo').value) || 0,
+                pagamento: document.getElementById('corr_pagamento').value,
+                descrizione: document.getElementById('corr_descrizione').value
+            };
+            state.corrispettivi.push(corr);
+            addToMastrino('Corrispettivi', corr.importo, 'Incasso ' + corr.data);
+            saveState();
+            renderCorrispettivi();
+            updateStats();
+            closeModal('corrispettivoModal');
+            alert('Corrispettivo salvato!');
+        }
+        
+        function filterCorrispettivi(period) {
+            renderCorrispettivi(period);
+        }
+        
+        function renderCorrispettivi(period) {
+            var container = document.getElementById('corrispettiviList');
+            var today = new Date().toISOString().split('T')[0];
+            var weekAgo = new Date(Date.now() - 7*24*60*60*1000).toISOString().split('T')[0];
+            var monthAgo = new Date(Date.now() - 30*24*60*60*1000).toISOString().split('T')[0];
+            
+            var filtered = state.corrispettivi.filter(function(c) {
+                if(period === 'all') return true;
+                if(period === 'today') return c.data === today;
+                if(period === 'week') return c.data >= weekAgo;
+                if(period === 'month') return c.data >= monthAgo;
+                return true;
+            });
+            
+            if(filtered.length === 0) {
+                container.innerHTML = '<div class="status-text">Nessun corrispettivo</div>';
+                return;
+            }
+            
+            container.innerHTML = filtered.sort(function(a,b){ return new Date(b.data) - new Date(a.data); }).map(function(c) {
+                return '<div class="list-item"><div class="icon" style="background:rgba(74,222,128,0.2)">💰</div><div class="info"><div class="title">'+c.descrizione+'</div><div class="subtitle">'+c.pagamento+' - '+c.data+'</div></div><div><div class="amount positive">€'+c.importo.toFixed(2)+'</div></div></div>';
+            }).join('');
+        }
+        
+        // ============ CESpITI ============
+        function saveCespite() {
+            var ces = {
+                id: Date.now(),
+                descrizione: document.getElementById('ces_descrizione').value,
+                categoria: document.getElementById('ces_categoria').value,
+                data: document.getElementById('ces_data').value,
+                valore: parseFloat(document.getElementById('ces_valore').value) || 0,
+                vita: parseInt(document.getElementById('ces_vita').value) || 5,
+                ammortizzato: 0
+            };
+            ces.annuale = ces.valore / ces.vita;
+            state.cespiti.push(ces);
+            addToMastrino('Cespite: ' + ces.descrizione, ces.valore, 'Acquisto');
+            saveState();
+            renderCespiti();
+            closeModal('cespiteModal');
+            alert('Cespite salvato!');
+        }
+        
+        function renderCespiti() {
+            var container = document.getElementById('cespitiList');
+            var categorie = {'immobili':'🏢','autoveicoli':'🚗','macchinari':'⚙️','mobili':'🪑','informatica':'💻','altro':'📦'};
+            
+            if(state.cespiti.length === 0) {
+                container.innerHTML = '<div class="status-text">Nessun cespite registrato</div>';
+                return;
+            }
+            
+            container.innerHTML = state.cespiti.map(function(c) {
+                var ammortamento = (c.valore / c.vita).toFixed(2);
+                return '<div class="card"><div class="card-header"><span class="card-title">'+categorie[c.categoria]+' '+c.descrizione+'</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:11px;"><div><span style="color:rgba(255,255,255,0.5)">Valore:</span> €'+c.valore.toFixed(2)+'</div><div><span style="color:rgba(255,255,255,0.5)">Vita:</span> '+c.vita+' anni</div><div><span style="color:rgba(255,255,255,0.5)">Ammortamento annuo:</span> €'+ammortamento+'</div><div><span style="color:rgba(255,255,255,0.5)">Acquisto:</span> '+c.data+'</div></div></div>';
+            }).join('');
+        }
+        
+        // ============ MASTRINI ============
+        function addToMastrino(conto, importo, descrizione) {
+            var movimento = {
+                id: Date.now(),
+                data: new Date().toISOString().split('T')[0],
+                descrizione: descrizione,
+                dare: importo,
+                avere: 0
             };
             
-            processingFiles.push(fileObj);
-            updateSidebar();
+            var mastrino = state.mastrini.find(function(m){ return m.conto === conto; });
+            if(!mastrino) {
+                mastrino = { conto: conto, movimenti: [] };
+                state.mastrini.push(mastrino);
+            }
+            mastrino.movimenti.push(movimento);
+        }
+        
+        function renderMastrini() {
+            var container = document.getElementById('mastrinoContent');
+            if(state.mastrini.length === 0) {
+                container.innerHTML = '<div class="status-text">Nessun mastrino registrato</div>';
+                return;
+            }
             
-            // Simulate processing
+            container.innerHTML = state.mastrini.map(function(m) {
+                var totaleDare = m.movimenti.reduce(function(s,v){ return s+v.dare; }, 0);
+                var totaleAvere = m.movimenti.reduce(function(s,v){ return s+v.avere; }, 0);
+                var saldo = totaleDare - totaleAvere;
+                
+                return '<div class="card"><div class="card-header"><span class="card-title">📒 '+m.conto+'</span><span class="card-amount '+(saldo>=0?'positive':'negative')+'">€'+saldo.toFixed(2)+'</span></div><table class="table"><thead><tr><th>Data</th><th>Descrizione</th><th>Dare</th><th>Avere</th></tr></thead><tbody>'+m.movimenti.map(function(v){ return '<tr><td>'+v.data+'</td><td>'+v.descrizione+'</td><td>'+(v.dare?'€'+v.dare.toFixed(2):'')+'</td><td>'+(v.avere?'€'+v.avere.toFixed(2):'')+'</td></tr>'; }).join('')+'</tbody></table></div>';
+            }).join('');
+        }
+        
+        // ============ CHAT ============
+        function createNewChat() {
+            var chat = {
+                id: Date.now(),
+                title: 'Chat ' + (state.chatHistory.length + 1),
+                messages: [{role:'ai', content:'👋 Ciao! Sono il tuo assistente contabile. Posso aiutarti con:\n• Fatture e corrispettivi\n• F24 e scadenze\n• Mastrini e cespiti\n• Esportazione dati\n\nSCRIVI "aiuto" per tutti i comandi!'}],
+                createdAt: new Date().toISOString()
+            };
+            state.chatHistory.unshift(chat);
+            state.currentChatId = chat.id;
+            saveState();
+            return chat;
+        }
+        
+        function loadChat(chatId) {
+            state.currentChatId = chatId;
+            var chat = state.chatHistory.find(function(c){ return c.id === chatId; });
+            if(chat) {
+                renderChat(chat.messages);
+            }
+        }
+        
+        function renderChat(messages) {
+            var container = document.getElementById('chatContainer');
+            container.innerHTML = messages.map(function(m) {
+                var icon = m.role === 'user' ? '👤' : '🤖';
+                return '<div class="message '+m.role+'">'+icon+' '+m.content.replace(/\n/g, '<br>')+'</div>';
+            }).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function sendMessage() {
+            var input = document.getElementById('chatInput');
+            var text = input.value.trim();
+            if(!text) return;
+            
+            var chat = state.chatHistory.find(function(c){ return c.id === state.currentChatId; });
+            if(!chat) {
+                chat = createNewChat();
+            }
+            
+            chat.messages.push({role:'user', content: text, time: new Date().toISOString()});
+            renderChat(chat.messages);
+            input.value = '';
+            
+            // AI Response
+            setTimeout(function() {
+                var response = getAIResponse(text);
+                chat.messages.push({role:'ai', content: response, time: new Date().toISOString()});
+                renderChat(chat.messages);
+                saveState();
+            }, 800);
+            
+            saveState();
+        }
+        
+        function getAIResponse(text) {
+            var t = text.toLowerCase();
+            
+            if(t.indexOf('aiuto') >= 0) {
+                return '🤖 Comandi disponibili:\n\n📄 **Fatture**\n• "fatture" - Lista fatture\n• "nuova fattura" - Crea fattura\n• "da pagare" - Fatture pendenti\n\n📋 **F24**\n• "f24" - Lista F24\n• "scadenze" - Prossime scadenze\n\n📒 **Mastrini**\n• "mastrini" - Vedi conti\n• "saldo" - Bilancio\n\n💰 **Corrispettivi**\n• "corrispettivi" - Lista incassi\n\n📦 **Cespiti**\n• "cespiti" - Beni ammortizzabili\n\n📊 **Report**\n• "export" - Esporta dati\n• "report" - Riepilogo mensile';
+            }
+            if(t.indexOf('fatture') >= 0 || t.indexOf('fattura') >= 0) {
+                var total = state.fattureIn.reduce(function(s,f){ return s+f.importo; }, 0) + state.fattureOut.reduce(function(s,f){ return s+f.importo; }, 0);
+                return '📄 Fatture:\n• In ingresso: '+state.fattureIn.length+' (€'+(state.fattureIn.reduce(function(s,f){ return s+f.importo; }, 0)).toFixed(2)+')\n• In uscita: '+state.fattureOut.length+' (€'+(state.fattureOut.reduce(function(s,f){ return s+f.importo; }, 0)).toFixed(2)+')';
+            }
+            if(t.indexOf('f24') >= 0 || t.indexOf('scadenza') >= 0) {
+                var unpaid = state.f24s.filter(function(f){ return !f.pagato; });
+                return '📋 F24:\n• Totali: '+state.f24s.length+'\n• Da pagare: '+unpaid.length+' (€'+(unpaid.reduce(function(s,f){ return s+f.importo; }, 0)).toFixed(2)+')';
+            }
+            if(t.indexOf('corrispettiv') >= 0) {
+                var totalCorr = state.corrispettivi.reduce(function(s,c){ return s+c.importo; }, 0);
+                return '💰 Corrispettivi:\n• Totale: '+state.corrispettivi.length+'\n• Incassato: €'+totalCorr.toFixed(2);
+            }
+            if(t.indexOf('mastrin') >= 0 || t.indexOf('conto') >= 0) {
+                return '📒 Mastrini: '+state.mastrini.length+' conti registrati\nVai alla sezione Mastrini per i dettagli.';
+            }
+            if(t.indexOf('cespit') >= 0) {
+                var totalCespiti = state.cespiti.reduce(function(s,c){ return s+c.valore; }, 0);
+                return '🏢 Cespiti: '+state.cespiti.length+' beni\n• Valore totale: €'+totalCespiti.toFixed(2);
+            }
+            if(t.indexOf('export') >= 0 || t.indexOf('esporta') >= 0) {
+                return '📥 Per esportare i dati vai su Impostazioni > Esporta Dati\nSupporta formato JSON e CSV.';
+            }
+            if(t.indexOf('report') >= 0 || t.indexOf('riepilogo') >= 0) {
+                var credits = state.fattureOut.reduce(function(s,f){ return s+f.importo; }, 0);
+                var debts = state.fattureIn.reduce(function(s,f){ return s+f.importo; }, 0);
+                var cash = state.corrispettivi.reduce(function(s,c){ return s+c.importo; }, 0);
+                return '📊 Riepilogo:\n• Crediti (fatture out): €'+credits.toFixed(2)+'\n• Debiti (fatture in): €'+debts.toFixed(2)+'\n• Incassi: €'+cash.toFixed(2)+'\n• Saldo: €'+(cash + credits - debts).toFixed(2);
+            }
+            
+            return '✅ Ho capito! Scrivi "aiuto" per i comandi disponibili.';
+        }
+        
+        function renderChatHistory() {
+            var container = document.getElementById('chatHistoryList');
+            if(state.chatHistory.length === 0) {
+                container.innerHTML = '<div class="status-text">Nessuna chat</div>';
+                return;
+            }
+            
+            container.innerHTML = state.chatHistory.map(function(c) {
+                var isActive = c.id === state.currentChatId;
+                return '<div class="sidebar-item '+(isActive?'style="background:rgba(108,99,255,0.3)"':'')+'" onclick="loadChat('+c.id+'); toggleSidebar();"><div class="icon">💬</div><div class="info"><div class="name">'+c.title+'</div><div class="status">'+c.messages.length+' messaggi</div></div></div>';
+            }).join('') + '<div class="sidebar-item" onclick="createNewChat(); toggleSidebar();" style="border:1px dashed rgba(255,255,255,0.2);"><div class="icon">➕</div><div class="info"><div class="name">Nuova Chat</div></div></div>';
+        }
+        
+        // ============ FILE HANDLING ============
+        function handleFile(file) {
+            if(!file) return;
+            var fileObj = {id: Date.now(), name: file.name, size: formatSize(file.size), type: getFileIcon(file.type), progress: 0};
+            state.processingFiles.push(fileObj);
+            updateSidebarFiles();
+            
             simulateProcessing(fileObj.id);
             
-            // Add to chat
-            var chatContainer = document.getElementById('chatContainer');
-            chatContainer.innerHTML += '<div class="message user"><div>📎 File: '+file.name+'</div><div class="file-preview"><span class="icon">'+fileObj.type+'</span><div class="info"><div class="name">'+file.name+'</div><div class="size">'+fileObj.size+'</div></div></div></div>';
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            var chat = state.chatHistory.find(function(c){ return c.id === state.currentChatId; });
+            if(chat) {
+                chat.messages.push({role:'user', content:'📎 File: '+file.name+' ('+fileObj.size+')'});
+                chat.messages.push({role:'ai', content:'📄 File ricevuto: '+file.name+'\nElaborazione in corso...'});
+                renderChat(chat.messages);
+                saveState();
+            }
         }
         
         function simulateProcessing(fileId) {
             var interval = setInterval(function() {
-                var file = processingFiles.find(function(f){ return f.id === fileId; });
+                var file = state.processingFiles.find(function(f){ return f.id === fileId; });
                 if(file) {
-                    file.progress += 10;
-                    updateSidebar();
-                    
+                    file.progress += 20;
+                    updateSidebarFiles();
                     if(file.progress >= 100) {
                         clearInterval(interval);
-                        // Move to completed
-                        processingFiles = processingFiles.filter(function(f){ return f.id !== fileId; });
-                        file.status = 'Completato';
+                        state.processingFiles = state.processingFiles.filter(function(f){ return f.id !== fileId; });
                         file.progress = 100;
-                        completedFiles.unshift(file);
-                        updateSidebar();
+                        state.completedFiles.unshift(file);
+                        updateSidebarFiles();
                         
-                        // Add AI response
-                        var chatContainer = document.getElementById('chatContainer');
-                        chatContainer.innerHTML += '<div class="message ai">✅ File "'+file.name+'" elaborato con successo! Clicca sulla sidebar per vedere i dettagli.</div>';
-                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                        var chat = state.chatHistory.find(function(c){ return c.id === state.currentChatId; });
+                        if(chat) {
+                            chat.messages.push({role:'ai', content:'✅ File "'+file.name+'" elaborato con successo!'});
+                            renderChat(chat.messages);
+                            saveState();
+                        }
                     }
                 }
-            }, 500);
+            }, 600);
         }
         
-        function updateSidebar() {
-            var processingHtml = processingFiles.length ? processingFiles.map(function(f) {
-                return '<div class="sidebar-item"><span class="icon">'+f.type+'</span><div class="info"><div class="name">'+f.name+'</div><div class="status">'+f.status+'</div><div class="progress"><div class="progress-bar" style="width:'+f.progress+'%;"></div></div></div></div>';
-            }).join('') : '<div class="status-text">Nessun file in elaborazione</div>';
+        function updateSidebarFiles() {
+            var procHtml = state.processingFiles.length ? state.processingFiles.map(function(f) {
+                return '<div class="sidebar-item"><span class="icon">'+f.type+'</span><div class="info"><div class="name">'+f.name+'</div><div class="status">Elaborazione...</div><div class="progress"><div class="progress-bar" style="width:'+f.progress+'%"></div></div></div></div>';
+            }).join('') : '<div style="font-size:10px;color:rgba(255,255,255,0.3);padding:5px;">Nessun file in elaborazione</div>';
             
-            var completedHtml = completedFiles.length ? completedFiles.map(function(f) {
+            var compHtml = state.completedFiles.length ? state.completedFiles.slice(0,5).map(function(f) {
                 return '<div class="sidebar-item"><span class="icon">'+f.type+'</span><div class="info"><div class="name">'+f.name+'</div><div class="status">✅ '+f.size+'</div></div></div>';
-            }).join('') : '<div class="status-text">Nessun file completato</div>';
+            }).join('') : '<div style="font-size:10px;color:rgba(255,255,255,0.3);padding:5px;">Nessun file completato</div>';
             
-            document.getElementById('processingFiles').innerHTML = processingHtml;
-            document.getElementById('completedFiles').innerHTML = completedHtml;
+            document.getElementById('processingFiles').innerHTML = procHtml;
+            document.getElementById('completedFiles').innerHTML = compHtml;
         }
         
         function formatSize(bytes) {
@@ -271,60 +940,93 @@
             if(type.startsWith('video/')) return '🎬';
             if(type.startsWith('audio/')) return '🎵';
             if(type.includes('pdf')) return '📄';
-            if(type.includes('word') || type.includes('document')) return '📝';
+            if(type.includes('word')) return '📝';
             if(type.includes('sheet') || type.includes('excel')) return '📊';
             return '📁';
         }
         
-        // Chat
-        function sendMessage() {
-            var inp = document.getElementById('chatInput');
-            var m = inp.value.trim();
-            if(!m) return;
-            
-            var chatContainer = document.getElementById('chatContainer');
-            chatContainer.innerHTML += '<div class="message user">'+m+'</div>';
-            inp.value = '';
-            
-            // AI Response
-            setTimeout(function() {
-                var r = 'Ho capito!';
-                if(m.toLowerCase().indexOf('aiuto') >= 0) r = '🤖 Comandi:\n• Invia file con 📎\n• Vedi file in elaborazione dalla sidebar\n• "link" - gestione link\n• "norme" - normative';
-                else if(m.toLowerCase().indexOf('file') >= 0) r = '📎 Puoi inviarmi file usando il pulsante 📎. Accetto: immagini, PDF, documenti, audio, video.';
-                else if(m.toLowerCase().indexOf('norma') >= 0) r = '📜 Normative disponibili:\n• GDPR\n• Codice Privacy\n• Cookie Law\n• NIS Directive';
-                
-                chatContainer.innerHTML += '<div class="message ai">'+r.replace(/\n/g, '<br>')+'</div>';
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }, 800);
-            
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+        // ============ SETTINGS ============
+        function loadCompanyData() {
+            var data = JSON.parse(localStorage.getItem('ml_company') || '{}');
+            document.getElementById('companyName').value = data.name || '';
+            document.getElementById('companyPiva').value = data.piva || '';
+            document.getElementById('companyAddress').value = data.address || '';
         }
         
-        // Norms search
-        function searchNorms() {
-            var query = document.getElementById('normSearch').value.toLowerCase();
-            var norms = [
-                { title: 'GDPR', desc: 'Regolamento UE 2016/679 sulla protezione dei dati personali.' },
-                { title: 'Codice Privacy', desc: 'D.Lgs. 196/2003 sulla protezione dei dati personali in Italia.' },
-                { title: 'Cookie Law', desc: 'Provvedimento Garante Privacy sui cookie.' },
-                { title: 'NIS Directive', desc: 'Direttiva sulla sicurezza delle reti e dei sistemi informatici.' },
-                { title: 'Cybersecurity Act', desc: 'Regolamento UE sui servizi di cybersecurity.' }
-            ];
+        function saveCompanyData() {
+            var data = {
+                name: document.getElementById('companyName').value,
+                piva: document.getElementById('companyPiva').value,
+                address: document.getElementById('companyAddress').value
+            };
+            localStorage.setItem('ml_company', JSON.stringify(data));
+            alert('Dati azienda salvati!');
+        }
+        
+        function exportData(format) {
+            var data = JSON.stringify(state, null, 2);
+            var blob = new Blob([data], {type: 'application/json'});
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'morelinks_backup_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            alert('Backup scaricato!');
+        }
+        
+        function importData(file) {
+            if(!file) return;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    var data = JSON.parse(e.target.result);
+                    state = data;
+                    saveState();
+                    renderAll();
+                    alert('Dati importati con successo!');
+                } catch(err) {
+                    alert('Errore: file non valido');
+                }
+            };
+            reader.readAsText(file);
+        }
+        
+        function clearAllData() {
+            localStorage.removeItem('ml_state');
+            localStorage.removeItem('ml_company');
+            state = {fattureIn:[], fattureOut:[], corrispettivi:[], f24s:[], cespiti:[], mastrini:[], chatHistory:[], currentChatId:null, processingFiles:[], completedFiles:[]};
+            createNewChat();
+            renderAll();
+            alert('Tutti i dati sono stati eliminati!');
+        }
+        
+        // ============ STATS ============
+        function updateStats() {
+            var inTotal = state.fattureIn.reduce(function(s,f){ return s+f.importo; }, 0);
+            var outTotal = state.fattureOut.reduce(function(s,f){ return s+f.importo; }, 0);
+            var corrTotal = state.corrispettivi.reduce(function(s,c){ return s+c.importo; }, 0);
+            var f24Total = state.f24s.filter(function(f){ return !f.pagato; }).reduce(function(s,f){ return s+f.importo; }, 0);
             
-            var filtered = norms.filter(function(n) {
-                return n.title.toLowerCase().indexOf(query) >= 0 || n.desc.toLowerCase().indexOf(query) >= 0;
-            });
-            
-            var html = filtered.length ? filtered.map(function(n) {
-                return '<div class="norm-card"><h3>📋 '+n.title+'</h3><p>'+n.desc+'</p></div>';
-            }).join('') : '<div class="status-text">Nessun risultato</div>';
-            
-            document.getElementById('normsList').innerHTML = html;
+            document.getElementById('totalIn').textContent = '€' + inTotal.toFixed(0);
+            document.getElementById('totalOut').textContent = '€' + outTotal.toFixed(0);
+            document.getElementById('totalCorr').textContent = '€' + corrTotal.toFixed(0);
+            document.getElementById('totalF24').textContent = '€' + f24Total.toFixed(0);
+            document.getElementById('totalDebts').textContent = '€' + inTotal.toFixed(2);
+            document.getElementById('totalCredits').textContent = '€' + outTotal.toFixed(2);
+        }
+        
+        function renderAll() {
+            renderFatture();
+            renderF24();
+            renderCorrispettivi();
+            renderCespiti();
+            renderMastrini();
+            renderChatHistory();
+            updateSidebarFiles();
         }
         
         // Init
-        renderLinks();
-        updateSidebar();
+        init();
     </script>
 </body>
 </html>
