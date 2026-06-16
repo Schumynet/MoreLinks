@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4361ee">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>MoreLinks - Piattaforma AI</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f0f23;
+            --dark-2: #1a1a2e;
+            --dark-3: #16213e;
+            --text: #eaeaea;
+            --text-muted: #888;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(67, 97, 238, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--dark-3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--primary);
+        }
+        
+        /* Main Content */
+        .main {
+            padding: 80px 20px 100px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Welcome Card */
+        .welcome-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+        
+        .welcome-card h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .welcome-card p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .welcome-card .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: var(--dark-3);
+            border: 1px solid rgba(67, 97, 238, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+        
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+        
+        /* Quick Actions */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .quick-btn {
+            background: var(--dark-3);
+            border: 1px solid rgba(67, 97, 238, 0.3);
+            border-radius: 16px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+        
+        .quick-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .quick-btn .icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .quick-btn .label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        /* Cards List */
+        .card-item {
+            background: var(--dark-3);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .card-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .card-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .card-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .card-stats {
+            text-align: right;
+            flex-shrink: 0;
+        }
+        
+        .card-stats .value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--success);
+        }
+        
+        .card-stats .label {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 35, 0.98);
+            backdrop-filter: blur(20px);
+            padding: 10px 20px 25px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(67, 97, 238, 0.3);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 5px 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+        }
+        
+        .nav-item .icon {
+            font-size: 24px;
+        }
+        
+        .nav-item .label {
+            font-size: 10px;
+        }
+        
+        /* FAB Button */
+        .fab {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 10px 30px rgba(67, 97, 238, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+        
+        .fab:hover {
+            transform: scale(1.1);
+        }
+        
+        .fab:active {
+            transform: scale(0.9);
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 20px;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--dark-2);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 25px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            background: var(--dark-3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--dark-3);
+            border: 2px solid rgba(67, 97, 238, 0.3);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(67, 97, 238, 0.3);
+        }
+        
+        /* File Upload */
+        .upload-zone {
+            border: 2px dashed rgba(67, 97, 238, 0.5);
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .upload-zone:hover {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+        }
+        
+        .upload-zone .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .upload-zone .text {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        /* Uploaded Files List */
+        .file-item {
+            background: var(--dark-3);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .file-size {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .file-delete {
+            width: 32px;
+            height: 32px;
+            background: rgba(239, 68, 68, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--danger);
+        }
+        
+        /* Chat Section */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 160px);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 20px;
+        }
+        
+        .message {
+            max-width: 85%;
+            margin-bottom: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.user {
+            margin-left: auto;
+        }
+        
+        .message.ai {
+            margin-right: auto;
+        }
+        
+        .message-bubble {
+            padding: 14px 18px;
+            border-radius: 18px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        
+        .message.user .message-bubble {
+            background: var(--primary);
+            border-bottom-right-radius: 4px;
+        }
+        
+        .message.ai .message-bubble {
+            background: var(--dark-3);
+            border: 1px solid rgba(67, 97, 238, 0.3);
+            border-bottom-left-radius: 4px;
+        }
+        
+        .message-time {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background: var(--dark-3);
+            border-radius: 24px;
+            margin-top: 15px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 16px;
+            padding: 10px;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+        }
+        
+        .chat-send {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        
+        /* Hidden sections */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">🔗</div>
+            <span class="logo-text">MoreLinks</span>
+        </div>
+        <div class="user-avatar" onclick="showModal('profile-modal')">
+            👤
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page active">
+            <!-- Welcome Card -->
+            <div class="welcome-card">
+                <h2>👋 Ciao, Fabio!</h2>
+                <p>Benvenuto nella tua piattaforma AI con memoria permanente</p>
+                <span class="badge">🧠 Memoria Attiva</span>
+            </div>
+            
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🔗</div>
+                    <div class="stat-value" id="links-count">0</div>
+                    <div class="stat-label">Link Totali</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👆</div>
+                    <div class="stat-value" id="clicks-count">0</div>
+                    <div class="stat-label">Click Totali</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📁</div>
+                    <div class="stat-value" id="files-count">0</div>
+                    <div class="stat-label">File Caricati</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🧠</div>
+                    <div class="stat-value">42</div>
+                    <div class="stat-label">Memoria AI</div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="section-title">⚡ Azioni Rapide</div>
+            <div class="quick-actions">
+                <div class="quick-btn" onclick="showPage('links-page')">
+                    <div class="icon">🔗</div>
+                    <div class="label">Nuovo Link</div>
+                </div>
+                <div class="quick-btn" onclick="showPage('chat-page')">
+                    <div class="icon">🤖</div>
+                    <div class="label">Chat AI</div>
+                </div>
+                <div class="quick-btn" onclick="showPage('upload-page')">
+                    <div class="icon">📤</div>
+                    <div class="label">Upload</div>
+                </div>
+                <div class="quick-btn" onclick="showPage('norms-page')">
+                    <div class="icon">📜</div>
+                    <div class="label">Normative</div>
+                </div>
+            </div>
+            
+            <!-- Recent Links -->
+            <div class="section-title">🔗 Link Recenti</div>
+            <div id="recent-links">
+                <div class="card-item">
+                    <div class="card-icon">🌐</div>
+                    <div class="card-content">
+                        <div class="card-title">GitHub</div>
+                        <div class="card-subtitle">github.com</div>
+                    </div>
+                    <div class="card-stats">
+                        <div class="value">1.2K</div>
+                        <div class="label">click</div>
+                    </div>
+                </div>
+                <div class="card-item">
+                    <div class="card-icon">🐍</div>
+                    <div class="card-content">
+                        <div class="card-title">Python</div>
+                        <div class="card-subtitle">python.org</div>
+                    </div>
+                    <div class="card-stats">
+                        <div class="value">892</div>
+                        <div class="label">click</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Links Page -->
+        <div id="links-page" class="page">
+            <h2 style="margin-bottom: 20px;">🔗 Gestione Link</h2>
+            
+            <button class="btn" onclick="showModal('new-link-modal')" style="margin-bottom: 20px;">
+                ➕ Crea Nuovo Link
+            </button>
+            
+            <div id="all-links">
+                <!-- Links will be populated here -->
+            </div>
+        </div>
+        
+        <!-- Upload Page -->
+        <div id="upload-page" class="page">
+            <h2 style="margin-bottom: 20px;">📤 Upload Manuale</h2>
+            
+            <p style="color: var(--text-muted); margin-bottom: 20px;">
+                Carica file, immagini e documenti. Saranno salvati nel tuo spazio personale.
+            </p>
+            
+            <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+                <div class="icon">📁</div>
+                <div class="text">
+                    <strong>Tocca per selezionare file</strong><br>
+                    JPG, PNG, PDF, DOC fino a 50MB
+                </div>
+            </div>
+            <input type="file" id="file-input" multiple accept="image/*,.pdf,.doc,.docx" style="display: none;" onchange="handleFileUpload(this.files)">
+            
+            <div class="section-title">📋 File Caricati</div>
+            <div id="uploaded-files">
+                <!-- Uploaded files will appear here -->
+            </div>
+            
+            <!-- User Folders -->
+            <div class="section-title" style="margin-top: 30px;">📂 Le Tue Cartelle</div>
+            <div class="card-item" onclick="showFolder('fabio')">
+                <div class="card-icon">👤</div>
+                <div class="card-content">
+                    <div class="card-title">Fabio</div>
+                    <div class="card-subtitle">Tu</div>
+                </div>
+            </div>
+            <div class="card-item" onclick="showFolder('condivisi')">
+                <div class="card-icon">🔄</div>
+                <div class="card-content">
+                    <div class="card-title">Condivisi</div>
+                    <div class="card-subtitle">File condivisi con te</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chat Page -->
+        <div id="chat-page" class="page">
+            <h2 style="margin-bottom: 20px;">🤖 Omni Brain - Chat AI</h2>
+            
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message ai">
+                        <div class="message-bubble">
+                            👋 Ciao! Sono <strong>Omni</strong>, il tuo assistente AI con memoria permanente.<br><br>
+                            Ricordo TUTTO ciò che mi dici. Come posso aiutarti?
+                        </div>
+                        <div class="message-time">Ora</div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chat-input" placeholder="Scrivi un messaggio..." onkeypress="if(event.key==='Enter')sendMessage()">
+                    <button class="chat-send" onclick="sendMessage()">📤</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Norms Page -->
+        <div id="norms-page" class="page">
+            <h2 style="margin-bottom: 20px;">📜 Normative Italiane</h2>
+            
+            <input type="text" class="form-input" placeholder="🔍 Cerca normativa..." style="margin-bottom: 20px;">
+            
+            <div class="section-title">🏷️ Categorie</div>
+            
+            <div class="card-item" onclick="showNormDetails('gdpr')">
+                <div class="card-icon">🔒</div>
+                <div class="card-content">
+                    <div class="card-title">GDPR - Privacy</div>
+                    <div class="card-subtitle">Reg. UE 679/2016</div>
+                </div>
+            </div>
+            <div class="card-item" onclick="showNormDetails('bilancio')">
+                <div class="card-icon">🏢</div>
+                <div class="card-content">
+                    <div class="card-title">Contabilità - Bilancio</div>
+                    <div class="card-subtitle">Codice Civile Art. 2423</div>
+                </div>
+            </div>
+            <div class="card-item" onclick="showNormDetails('lavoro')">
+                <div class="card-icon">👷</div>
+                <div class="card-content">
+                    <div class="card-title">Sicurezza Lavoro</div>
+                    <div class="card-subtitle">DLgs 81/2008</div>
+                </div>
+            </div>
+            <div class="card-item" onclick="showNormDetails('231')">
+                <div class="card-icon">⚖️</div>
+                <div class="card-content">
+                    <div class="card-title">Responsabilità Enti</div>
+                    <div class="card-subtitle">DLgs 231/2001</div>
+                </div>
+            </div>
+            <div class="card-item" onclick="showNormDetails('antiric')">
+                <div class="card-icon">🔄</div>
+                <div class="card-content">
+                    <div class="card-title">Antiriciclaggio</div>
+                    <div class="card-subtitle">DLgs 231/2007</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FAB Button -->
+    <div class="fab" onclick="showModal('new-link-modal')">+</div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="showPage('dashboard-page')">
+            <span class="icon">🏠</span>
+            <span class="label">Home</span>
+        </div>
+        <div class="nav-item" onclick="showPage('links-page')">
+            <span class="icon">🔗</span>
+            <span class="label">Link</span>
+        </div>
+        <div class="nav-item" onclick="showPage('upload-page')">
+            <span class="icon">📤</span>
+            <span class="label">Upload</span>
+        </div>
+        <div class="nav-item" onclick="showPage('chat-page')">
+            <span class="icon">🤖</span>
+            <span class="label">AI</span>
+        </div>
+        <div class="nav-item" onclick="showPage('norms-page')">
+            <span class="icon">📜</span>
+            <span class="label">Norme</span>
+        </div>
+    </nav>
+
+    <!-- New Link Modal -->
+    <div class="modal" id="new-link-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">🔗 Nuovo Link</span>
+                <div class="modal-close" onclick="hideModal('new-link-modal')">✕</div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">URL</label>
+                <input type="url" class="form-input" id="new-link-url" placeholder="https://example.com">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Titolo</label>
+                <input type="text" class="form-input" id="new-link-title" placeholder="Nome del link">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Tags (separati da virgola)</label>
+                <input type="text" class="form-input" id="new-link-tags" placeholder="marketing, social, home">
+            </div>
+            
+            <button class="btn" onclick="createNewLink()">✅ Crea Link</button>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal" id="profile-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">👤 Profilo</span>
+                <div class="modal-close" onclick="hideModal('profile-modal')">✕</div>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 36px;">👤</div>
+                <h3>Fabio</h3>
+                <p style="color: var(--text-muted);">admin@morelinks.local</p>
+            </div>
+            
+            <div style="background: var(--dark-3); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Link Creati</span>
+                    <strong id="modal-links-count">0</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Storage Usato</span>
+                    <strong>2.3 MB</strong>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="hideModal('profile-modal')">Chiudi</button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DATA ====================
+        let links = [];
+        let uploadedFiles = [];
+        let chatHistory = [];
+        
+        // ==================== NAVIGATION ====================
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+        
+        // ==================== MODALS ====================
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+        
+        function hideModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // ==================== LINKS ====================
+        function createNewLink() {
+            const url = document.getElementById('new-link-url').value;
+            const title = document.getElementById('new-link-title').value || url;
+            const tags = document.getElementById('new-link-tags').value;
+            
+            if (!url) {
+                alert('Inserisci un URL valido');
+                return;
+            }
+            
+            const code = generateCode(6);
+            const newLink = {
+                code: code,
+                url: url,
+                title: title,
+                tags: tags,
+                clicks: 0,
+                created: new Date().toISOString()
+            };
+            
+            links.push(newLink);
+            updateStats();
+            renderLinks();
+            
+            hideModal('new-link-modal');
+            
+            // Clear form
+            document.getElementById('new-link-url').value = '';
+            document.getElementById('new-link-title').value = '';
+            document.getElementById('new-link-tags').value = '';
+            
+            alert('✅ Link creato!\n\n🔗 https://ml.app/' + code);
+        }
+        
+        function generateCode(length) {
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+        
+        function renderLinks() {
+            const container = document.getElementById('all-links') || document.getElementById('recent-links');
+            if (container.id === 'all-links') {
+                container.innerHTML = links.map(link => `
+                    <div class="card-item">
+                        <div class="card-icon">🔗</div>
+                        <div class="card-content">
+                            <div class="card-title">${link.title}</div>
+                            <div class="card-subtitle">${link.url}</div>
+                        </div>
+                        <div class="card-stats">
+                            <div class="value">${link.clicks}</div>
+                            <div class="label">click</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        // ==================== FILE UPLOAD ====================
+        function handleFileUpload(files) {
+            for (let file of files) {
+                const fileData = {
+                    name: file.name,
+                    size: formatSize(file.size),
+                    type: file.type,
+                    date: new Date().toLocaleDateString(),
+                    id: generateCode(8)
+                };
+                uploadedFiles.push(fileData);
+                renderUploadedFiles();
+                document.getElementById('files-count').textContent = uploadedFiles.length;
+            }
+        }
+        
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+        
+        function renderUploadedFiles() {
+            const container = document.getElementById('uploaded-files');
+            container.innerHTML = uploadedFiles.map(file => `
+                <div class="file-item">
+                    <div class="file-icon">${getFileIcon(file.type)}</div>
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${file.size} • ${file.date}</div>
+                    </div>
+                    <div class="file-delete" onclick="deleteFile('${file.id}')">🗑️</div>
+                </div>
+            `).join('');
+        }
+        
+        function getFileIcon(type) {
+            if (type.startsWith('image/')) return '🖼️';
+            if (type.includes('pdf')) return '📄';
+            return '📎';
+        }
+        
+        function deleteFile(id) {
+            uploadedFiles = uploadedFiles.filter(f => f.id !== id);
+            renderUploadedFiles();
+            document.getElementById('files-count').textContent = uploadedFiles.length;
+        }
+        
+        function showFolder(folder) {
+            alert('📂 Cartella: ' + folder + '\n\n(File in sviluppo)');
+        }
+        
+        // ==================== CHAT ====================
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addChatMessage('user', message);
+            input.value = '';
+            
+            // Simulate AI response
+            setTimeout(() => {
+                let response = generateAIResponse(message);
+                addChatMessage('ai', response);
+            }, 1000);
+        }
+        
+        function addChatMessage(role, content) {
+            const container = document.getElementById('chat-messages');
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            container.innerHTML += `
+                <div class="message ${role}">
+                    <div class="message-bubble">${content}</div>
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            
+            container.scrollTop = container.scrollHeight;
+            
+            // Save to history
+            chatHistory.push({role, content, time});
+        }
+        
+        function generateAIResponse(message) {
+            const msg = message.toLowerCase();
+            
+            if (msg.includes('ciao') || msg.includes('salve')) {
+                return "👋 Ciao! Sono <strong>Omni</strong>, il tuo assistente AI con memoria permanente. Ricordo TUTTO ciò che mi dici!<br><br>Come posso aiutarti?";
+            }
+            
+            if (msg.includes('normativa') || msg.includes('legge') || msg.includes('gdpr')) {
+                return "📜 Ho cercato nelle normative italiane:<br><br><strong>GDPR (Reg. UE 679/2016)</strong><br>• Obbligo protezione dati<br>• DPO obbligatorio<br>• Notifica violazioni 72h<br><br>Vuoi approfondire?";
+            }
+            
+            if (msg.includes('link') || msg.includes('crea')) {
+                return "🔗 Posso aiutarti con i link!<br><br>• Creare nuovi short URL<br>• Mostrare statistiche<br>• Generare QR code<br><br>Clicca su <strong>+</strong> per creare un nuovo link.";
+            }
+            
+            if (msg.includes('file') || msg.includes('upload') || msg.includes('carica')) {
+                return "📤 Per caricare file, vai nella sezione <strong>Upload</strong> dal menu in basso.<br><br>Puoi caricare:<br>• Immagini (JPG, PNG)<br>• Documenti (PDF, DOC)<br>• File fino a 50MB";
+            }
+            
+            if (msg.includes('stats') || msg.includes('statistiche')) {
+                return `📊 Ecco le tue statistiche:<br><br>• 🔗 Link totali: ${links.length}<br>• 📁 File caricati: ${uploadedFiles.length}<br>• 🧠 Conversazioni: ${chatHistory.length}<br><br>Vuoi dati più dettagliati?`;
+            }
+            
+            return `🤖 Ho capito: "${message}"<br><br>Posso aiutarti con:<br>• 🔗 Gestione link<br>• 📜 Normative italiane<br>• 📤 Upload file<br>• 📊 Statistiche<br><br>Cosa ti serve?`;
+        }
+        
+        // ==================== NORMS ====================
+        function showNormDetails(norm) {
+            const norms = {
+                'gdpr': {
+                    title: 'GDPR - Reg. UE 679/2016',
+                    obligations: [
+                        'Protezione dati personali',
+                        'Nomina DPO (se richiesto)',
+                        'Registro trattamenti',
+                        'Notifica violazioni entro 72h',
+                        'Informativa agli interessati'
+                    ],
+                    penalties: 'Fino a € 20 milioni o 4% fatturato'
+                },
+                'bilancio': {
+                    title: 'Contabilità - Art. 2423 CC',
+                    obligations: [
+                        'Redazione bilancio annuale',
+                        'Osservanza criteri OIC',
+                        'Deposito Registro Imprese',
+                        'Relazione sulla gestione'
+                    ],
+                    penalties: 'Arresto fino a 5 anni per false comunicazioni'
+                },
+                'lavoro': {
+                    title: 'Sicurezza - DLgs 81/2008',
+                    obligations: [
+                        'Valutazione rischi (DVR)',
+                        'Nomina RSPP',
+                        'Sorveglianza sanitaria',
+                        'Formazione lavoratori',
+                        'Dispositivi protezione'
+                    ],
+                    penalties: 'Arresto 3-6 mesi o ammenda € 2.500-€ 10.000'
+                },
+                '231': {
+                    title: 'Responsabilità Enti - DLgs 231/2001',
+                    obligations: [
+                        'Adozione Modello Organizzativo',
+                        'Nomina Organismo di Vigilanza',
+                        'Codice Etico',
+                        'Whistleblowing',
+                        'Formazione personale'
+                    ],
+                    penalties: 'Sanzioni fino a € 1.500.000 + interdittive'
+                },
+                'antiric': {
+                    title: 'Antiriciclaggio - DLgs 231/2007',
+                    obligations: [
+                        'Adeguata verifica cliente (KYC)',
+                        'Identificazione titolari effettivi',
+                        'Segnalazione operazioni sospette',
+                        'Conservazione documenti 10 anni',
+                        'Formazione personale'
+                    ],
+                    penalties: 'Fino a € 5 milioni + responsabilità penale'
+                }
+            };
+            
+            const n = norms[norm];
+            if (n) {
+                alert(`${n.title}\n\n📋 Obblighi:\n${n.obligations.map(o => '• ' + o).join('\n')}\n\n⚠️ Sanzioni:\n${n.penalties}`);
+            }
+        }
+        
+        // ==================== UTILS ====================
+        function updateStats() {
+            document.getElementById('links-count').textContent = links.length;
+            document.getElementById('clicks-count').textContent = links.reduce((sum, l) => sum + l.clicks, 0);
+            document.getElementById('modal-links-count').textContent = links.length;
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStats();
+        });
+    </script>
+</body>
+</html>
